@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Abrafis</title>
+
+    {{-- icon web app --}}
+    <link rel="shortcut icon" href="{{ asset("template/dist/img/AdminLTELogo.png") }}">
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{{ asset("aa/fonts/material-icon/css/material-design-iconic-font.min.css") }}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{{ asset("aa/css/style.css") }}">
+
+    {{-- Link CSS Toastr --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    {{-- Plugin JqueryCDN --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    {{-- Plugin Toastr --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+    <div class="main">
+        <!-- Sing in  Form -->
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="{{ asset("aa/images/signin-image.jpg") }}" alt="sing up image"></figure>
+                        @if (Route::has('register'))
+                            <a class="signup-image-link" href="{{ route('register') }}">
+                                {{ __('Create an account') }}
+                            </a>
+                        @endif
+                        @if (Route::has('password.request'))
+                            <a class="signup-image-link" href="{{ route('password.request') }}">
+                                {{ __('Lupa Password?') }}
+                            </a>
+                        @endif
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign in</h2>
+                        <form action="{{ route('login') }}" method="post" class="register-form" id="login-form">
+                            @csrf
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="email" class="@error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email" autofocus>
+                                @error('email')
+                                    <script>toastr.error("{{ $message }}")</script>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" class="@error('password') is-invalid @enderror" id="pass" name="password" placeholder="Password" required autocomplete="current-password">
+                                @error('password')
+                                    <script>toastr.error("{{ $message }}")</script>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                            </div>
+                            <div class="input-type-group mb-3">
+                                {!! NoCaptcha::renderJs('en', false, 'onloadCallback') !!}
+                                {!! NoCaptcha::display(['data-theme' => 'light']) !!}
+                                @if ($errors->has('g-recaptcha-response'))
+                                <span class="help-block">
+                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                            </div>
+                        </form>
+                        <div class="social-login">
+                            <div class="position-relative">
+                                <div class="card-footerbg-white mb-3 mt-3 text-muted d-flex justify-content-center">
+                                  <p class="lead">
+                                    Abrafis by SMKN 01 Katapang
+                                  </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{{ asset("aa/vendor/jquery/jquery.min.js") }}"></script>
+    <script src="{{ Asset("aa/js/main.js") }}"></script>
+
+    {{-- onload reaptha --}}
+    <script>
+        let onloadCallback = function() {
+            alert("grecaptcha is ready!");
+    };
+    </script>
+    <!-- jQuery -->
+    <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
+</body>
+</html>
