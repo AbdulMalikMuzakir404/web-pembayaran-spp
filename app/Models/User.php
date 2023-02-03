@@ -22,7 +22,15 @@ class User extends Authenticatable
         'email',
         'password',
         'level',
-        'username'
+        'username',
+        'spp_id',
+        'ruang_id',
+        'kelas_id',
+        'imagae',
+        'nisn',
+        'nis',
+        'alamat',
+        'no_telp'
     ];
 
     /**

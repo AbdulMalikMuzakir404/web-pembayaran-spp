@@ -31,10 +31,10 @@ return new class extends Migration
             $table->index('spp_id');
             $table->foreign('spp_id')->references('id')->on('spps')->onDelete('cascade');
 
-            $table->string('nisn', 10)->unique()->nullable();
-            $table->string('nis', 8)->nullable();
+            $table->string('nisn', 20)->unique()->nullable();
+            $table->string('nis', 70)->nullable();
             $table->text('alamat')->nullable();
-            $table->string('no_telp', 13)->nullable();
+            $table->string('no_telp', 20)->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
