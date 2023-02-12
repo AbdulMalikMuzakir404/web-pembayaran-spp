@@ -68,7 +68,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="email"><i class="bi bi-person"></i></label>
+                            <label for="email"><i class="bi bi-envelope"></i></label>
                             <input type="email" class="@error('email') is-invalid @enderror" id="email"
                                 name="email" value="{{ old('email') }}" placeholder="Email" required
                                 autocomplete="on">
@@ -79,7 +79,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="username"><i class="bi bi-person"></i></label>
+                            <label for="username"><i class="bi bi-person-circle"></i></label>
                             <input type="text" class="@error('username') is-invalid @enderror" id="username"
                                 name="username" value="{{ old('username') }}" placeholder="Username" required
                                 autocomplete="off">
@@ -90,7 +90,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="password"><i class="bi bi-person"></i></label>
+                            <label for="password"><i class="bi bi-lock"></i></label>
                             <input type="password" class="@error('password') is-invalid @enderror" id="password"
                                 name="password" value="{{ old('password') }}" placeholder="Password" required
                                 autocomplete="off">
@@ -101,7 +101,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="password_confirmation"><i class="bi bi-person"></i></label>
+                            <label for="password_confirmation"><i class="bi bi-lock"></i></label>
                             <input type="password" class="@error('password_confirmation') is-invalid @enderror" id="password_confirmation"
                                 name="password_confirmation" value="{{ old('password_confirmation') }}" placeholder="Password Confirm" required
                                 autocomplete="new-password">

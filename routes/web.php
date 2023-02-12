@@ -56,6 +56,6 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/home/make-siswa', [makeUserController::class, 'showFormSiswa'])->name('makeSiswa')->middleware('admin');
         Route::get('/home/make-petugas', [makeUserController::class, 'showFormPetugas'])->name('makePetugas')->middleware('admin');
-        Route::get('/home/data-creare', [makeUserController::class, 'showDataCreate'])->name('dataCreate')->middleware('admin');
+        Route::get('/home/data-create', [makeUserController::class, 'showDataCreate'])->name('dataCreate')->middleware('admin');
     });
 });

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('ruangs', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kelas', 10);
-            $table->enum('kopetensi_keahlian', ["rpl", "mm", "tkj"]);
+            $table->string('kopetensi_keahlian', 10);
             $table->timestamps();
         });
     }

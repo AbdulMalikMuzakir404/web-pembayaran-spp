@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('username', 25)->nullable();
             $table->string('password', 70)->nullable();
-            $table->string('email', 70)->unique();
+            $table->string('email', 70)->unique()->nullable();
             $table->string('nama', 35)->nullable();
             $table->enum('level', ['admin', 'petugas', 'siswa']);
 
