@@ -16,7 +16,7 @@ class MakePetugas extends Component
     public $search;
     protected $queryString = ['search'];
 
-    public $email, $nama, $username, $password;
+    public $email, $name, $username, $password;
 
     public $status_petugas = false;
 
@@ -33,7 +33,7 @@ class MakePetugas extends Component
             'petugas' => $this->search == null ? user::where('level', 'petugas')
             ->paginate($this->paginate) :
             user::where('level', 'petugas')
-            ->where('nama', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%' . $this->search . '%')
             ->paginate($this->paginate),
         ]);
     }
@@ -50,7 +50,7 @@ class MakePetugas extends Component
 
     public function handleDeletePetugas()
     {
-        // 
+        //
     }
 
     public function handleAddPetugas()
@@ -63,13 +63,13 @@ class MakePetugas extends Component
         $this->validate([
             'email' => 'required|email|string|min:5|max:50|unique:users',
             'username' => 'required|min:5|string|max:50|unique:users',
-            'nama' => 'required|min:5|max:50|string|unique:users',
+            'name' => 'required|min:5|max:50|string|unique:users',
             'password' => 'required|min:8|max:70|string'
         ]);
 
         User::create([
             'email' => $this->email,
-            'nama' => $this->nama,
+            'name' => $this->name,
             'username' => $this->username,
             'password' => Hash::make($this->password),
             'level' => 'petugas',
@@ -80,11 +80,11 @@ class MakePetugas extends Component
     }
 
     public function getIdPetugas($id)
-   {
-        $this->status_petugas = true;
-        $data = user::find($id);
-        $this->emit('passing-update-data-petugas', $data);
-   }
+    {
+            $this->status_petugas = true;
+            $data = user::find($id);
+            $this->emit('passing-update-data-petugas', $data);
+    }
 
    public function deletePetugas($id)
    {
@@ -95,7 +95,7 @@ class MakePetugas extends Component
    private function clearDataCreatePetugas()
     {
         $this->email = null;
-        $this->nama = null;
+        $this->name = null;
         $this->username = null;
         $this->password = null;
     }

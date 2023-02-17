@@ -17,7 +17,7 @@ class MakeUser extends Component
     public $search;
     protected $queryString = ['search'];
 
-    public $email, $nisn, $nis, $nama, $no_telp, $alamat, $spp_id, $ruang_id;
+    public $email, $nisn, $nis, $name, $no_telp, $alamat, $spp_id, $ruang_id;
 
     public $status_siswa = false;
 
@@ -41,7 +41,7 @@ class MakeUser extends Component
             user::join('spps', 'spps.user_id', 'users.id')
             ->join('ruangs', 'ruangs.user_id', 'users.id')
             ->where('level', 'siswa')
-            ->where('nama', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%' . $this->search . '%')
             ->paginate($this->paginate),
         ]);
     }
@@ -71,7 +71,7 @@ class MakeUser extends Component
         $this->validate([
             'nisn' => 'required|min:5|max:13|unique:users|string',
             'nis' => 'required|min:5|max:13|unique:users|string',
-            'nama' => 'required|min:5|max:50|string|unique:users',
+            'name' => 'required|min:5|max:50|string|unique:users',
             'no_telp' => 'required|min:5|max:20|string',
             'alamat' => 'required|min:5|max:70|string',
             'spp_id' => 'required',
@@ -81,7 +81,7 @@ class MakeUser extends Component
         User::create([
             'nisn' => $this->nisn,
             'nis' => $this->nis,
-            'nama' => $this->nama,
+            'name' => $this->name,
             'no_telp' => $this->no_telp,
             'alamat' => $this->alamat,
             'spp_id' => $this->spp_id,
@@ -97,7 +97,7 @@ class MakeUser extends Component
     {
         $this->nisn = null;
         $this->nis = null;
-        $this->nama = null;
+        $this->name = null;
         $this->no_telp = null;
         $this->alamat = null;
         $this->spp_id = null;

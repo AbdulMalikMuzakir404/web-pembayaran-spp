@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('username', 25)->nullable();
             $table->string('password', 70)->nullable();
             $table->string('email', 70)->unique()->nullable();
-            $table->string('nama', 35)->nullable();
+            $table->string('name', 35);
             $table->enum('level', ['admin', 'petugas', 'siswa']);
 
-            $table->string('image', 70)->nullable();
+            $table->string('photo', 70)->nullable();
 
             $table->unsignedBigInteger('ruang_id')->nullable();
             $table->index('ruang_id');
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->index('spp_id');
             $table->foreign('spp_id')->references('id')->on('spps')->onDelete('cascade');
 
-            $table->string('nisn', 20)->unique()->nullable();
+            $table->string('nisn', 20)->unique();
             $table->string('nis', 70)->nullable();
             $table->text('alamat')->nullable();
             $table->string('no_telp', 20)->nullable();

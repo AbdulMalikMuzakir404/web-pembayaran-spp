@@ -28,10 +28,11 @@ return new class extends Migration
             $table->index('spp_id');
             $table->foreign('spp_id')->references('id')->on('spps')->onDelete('cascade');
 
-            $table->date('tgl_bayar');
-            $table->string('bulan_dibayar', 8);
-            $table->string('tahun_dibayar', 4);
-            $table->string('jumlah_bayar', 11);
+            $table->string('tgl_dibayar', 5);
+            $table->string('bln_dibayar', 15);
+            $table->string('thn_dibayar', 10);
+            $table->string('jumlah_bayar', 20);
+            $table->boolean('status_pembayaran');
             $table->timestamps();
         });
     }

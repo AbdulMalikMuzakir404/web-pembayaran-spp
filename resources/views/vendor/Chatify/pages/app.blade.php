@@ -5,7 +5,7 @@
         {{-- Header and search bar --}}
         <div class="m-header">
             <nav>
-                <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">SPP | MESSAGES</span> </a>
+                <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">MESSAGES</span> </a>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
                     <a href="#"><i class="fas fa-cog settings-btn"></i></a>
@@ -46,7 +46,7 @@
            <div class="@if($type == 'group') show @endif messenger-tab groups-tab app-scroll" data-view="groups">
                 {{-- items --}}
                 <p style="text-align: center;color:grey;margin-top:30px">
-                    Still Under Development.
+                    STILL UNDER DEVELOPMENT.
                 </p>
              </div>
 

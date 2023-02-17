@@ -57,11 +57,11 @@
 
                     <div class="px-2">
                         <div class="form-group">
-                            <label for="nama"><i class="bi bi-person"></i></label>
-                            <input type="text" class="@error('nama') is-invalid @enderror" id="nama"
-                                name="nama" value="{{ old('nama') }}" placeholder="Nama" required
+                            <label for="name"><i class="bi bi-person"></i></label>
+                            <input type="text" class="@error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name') }}" placeholder="Name" required
                                 autocomplete="on" autofocus>
-                            @error('nama')
+                            @error('name')
                                 <script>
                                     toastr.error("{{ $message }}")
                                 </script>

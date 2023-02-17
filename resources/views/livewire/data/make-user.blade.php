@@ -90,10 +90,10 @@
                                         <h6 class="mb-0">Nama Lengkap</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" wire:model.lazy="nama"
-                                            class="form-control @error('nama') is-invalid @enderror"
-                                            placeholder="Nama Lengkap" required>
-                                        @error('nama')
+                                        <input type="text" wire:model.lazy="name"
+                                            class="form-control @error('name') is-invalid @enderror"
+                                            placeholder="Name Lengkap" required>
+                                        @error('name')
                                             <span class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -188,7 +188,7 @@
                               <td>{{ $dataSiswa->nis }}</td>
                               <td>{{ $dataSiswa->tahun . " - " . $dataSiswa->nominal }}</td>
                               <td>{{ $dataSiswa->nama_kelas . " - " . $dataSiswa->kopetensi_keahlian }}</td>
-                              <td>{{ $dataSiswa->nama }}</td>
+                              <td>{{ $dataSiswa->name }}</td>
                               <td>{{ $dataSiswa->no_telp }}</td>
                               <td>{{ $dataSiswa->alamat }}</td>
                               <td>

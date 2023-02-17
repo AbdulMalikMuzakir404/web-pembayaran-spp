@@ -109,6 +109,11 @@
                             class="btn-block mx-auto rounded-pill">Masuk</button>
                     </div>
 
+                    <div class="px-2 mt-3">
+                        <button type="submit" style="background: #2F5D62; color: rgb(255, 255, 255);"
+                            class="btn-block mx-auto rounded-pill">Masuk sebagai Siswa</button>
+                    </div>
+
                 </form>
 
                 <div class="row">

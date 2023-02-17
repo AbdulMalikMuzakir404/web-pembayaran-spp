@@ -13,7 +13,7 @@ class ChangeProfile extends Component
 {
     use WithFileUploads;
 
-    public $email, $nama, $level, $username, $image, $userId;
+    public $email, $name, $level, $username, $photo, $userId;
 
     public $old_password, $password, $password_confirmation;
 
@@ -21,7 +21,7 @@ class ChangeProfile extends Component
     {
         $this->userId = Auth()->user()->id;
         $this->email = Auth()->user()->email;
-        $this->nama = Auth()->user()->nama;
+        $this->name = Auth()->user()->name;
         $this->level = Auth()->user()->level;
         $this->username = Auth()->user()->username;
     }
@@ -79,17 +79,17 @@ class ChangeProfile extends Component
     public function updateImage()
     {
         $this->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+            'photo' => 'required|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
         ]);
 
-        Storage::disk('public')->delete('profile/' . Auth()->user()->image);
+        Storage::disk('public')->delete('profile/' . Auth()->user()->photo);
 
         $destination_path = 'public/profile';
-        $foto = time() . '_' . rand() . '.' . $this->image->extension();
-        $this->image->storeAs($destination_path, $foto);
+        $foto = time() . '_' . rand() . '.' . $this->photo->extension();
+        $this->photo->storeAs($destination_path, $foto);
 
         User::where('id', $this->userId)->update([
-            'image' => $foto,
+            'photo' => $foto,
         ]);
 
         return redirect()
@@ -99,15 +99,15 @@ class ChangeProfile extends Component
 
     public function deleteImage()
     {
-        if (Storage::delete('profile/' . Auth()->user()->image)) {
-            Storage::disk('public')->delete('profile/' . Auth()->user()->image);
+        if (Storage::delete('profile/' . Auth()->user()->photo)) {
+            Storage::disk('public')->delete('profile/' . Auth()->user()->photo);
             /*
                 Delete Multiple File like this way
                 Storage::delete(['upload/example.png', 'upload/example2.png']);
             */
 
             User::where('id', $this->userId)->update([
-                'image' => null,
+                'photo' => null,
             ]);
 
             return redirect()

@@ -99,18 +99,18 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        @if (Auth::user()->image == null)
+                        @if (Auth::user()->photo == null)
                             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="img"
                                 class="rounded-circle" height="150px" width="150" id="myImg">
                         @endif
 
-                        @if (Auth::user()->image != null)
-                            <img src="{{ asset('storage/profile/' . Auth::user()->image) }}" alt="img"
-                                class="rounded-circle" height="150px" width="150" id="myImg">
+                        @if (Auth::user()->photo != null)
+                            <img src="{{ asset('storage/profile/' . Auth::user()->photo) }}" alt="img"
+                                class="rounded-circle" style="width: 40px; height: 40px;" id="myImg">
                         @endif
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
+                        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
 
 
                         {{-- public --}}
-                        <li class="nav-item bg-primary">
+                        <li class="nav-item{{ Request::path() === route('home') ? 'bg-primary' : '' }}">
                             <a href="{{ route('home') }}" class="nav-link">
                                 <i class="nav-icon bi bi-house-fill"></i>
                                 <p>
@@ -156,6 +156,15 @@
 
                         @can('admin')
                         <li class="nav-item">
+                            <a href="{{ route('dataTransaksi') }}" class="nav-link">
+                                <i class="nav-icon bi bi-bank"></i>
+                                <p>
+                                    Transaksi
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-table"></i>
                                 <p>
@@ -167,7 +176,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('makeSiswa') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                                        <i class="nav-icon bi bi-person"></i>
                                         <p>
                                             Create data Siswa
                                         </p>
@@ -176,7 +185,7 @@
 
                                 <li class="nav-item">
                                     <a href="{{ route('makePetugas') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-heart-pulse"></i>
+                                        <i class="nav-icon bi bi-person-badge"></i>
                                         <p>
                                             Create data Petugas
                                         </p>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class PetugasUpdate extends Component
 {
-    public $email, $nama, $username, $password, $petugasId;
+    public $email, $name, $username, $password, $petugasId;
 
     // lintening
     protected $listeners = [
@@ -29,7 +29,7 @@ class PetugasUpdate extends Component
     {
         $this->petugasId = $data['id'];
         $this->email = $data['email'];
-        $this->nama = $data['nama'];
+        $this->name = $data['name'];
         $this->username = $data['username'];
         $this->password = 'Data Encrypt';
     }
@@ -39,12 +39,12 @@ class PetugasUpdate extends Component
         $this->validate([
             'email' => 'required|email|string|min:5|max:50',
             'username' => 'required|min:5|string|max:50',
-            'nama' => 'required|min:5|max:50|string'
+            'name' => 'required|min:5|max:50|string'
         ]);
 
         User::find($this->petugasId)->update([
             'email' => $this->email,
-            'nama' => $this->nama,
+            'name' => $this->name,
             'username' => $this->username
         ]);
 
@@ -56,7 +56,7 @@ class PetugasUpdate extends Component
     {
         $this->petugasId = null;
         $this->email = null;
-        $this->nama = null;
+        $this->name = null;
         $this->username = null;
         $this->password = null;
     }

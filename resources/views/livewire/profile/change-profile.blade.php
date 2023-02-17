@@ -119,9 +119,9 @@
                             </div>
 
 
-                            @if (Auth::user()->image == null)
-                                @if ($image)
-                                    <img src="{{ $image->temporaryUrl() }}" alt="img" class="rounded-circle"
+                            @if (Auth::user()->photo == null)
+                                @if ($photo)
+                                    <img src="{{ $photo->temporaryUrl() }}" alt="img" class="rounded-circle"
                                         height="150px" width="150" id="myImg">
                                 @else
                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="img" class="rounded-circle" height="150px"
@@ -129,12 +129,12 @@
                                 @endif
 
                             @endif
-                            @if (Auth::user()->image != null)
-                                @if ($image)
-                                    <img src="{{ $image->temporaryUrl() }}" alt="img" class="rounded-circle"
+                            @if (Auth::user()->photo != null)
+                                @if ($photo)
+                                    <img src="{{ $photo->temporaryUrl() }}" alt="img" class="rounded-circle"
                                         height="150px" width="150" id="myImg">
                                 @else
-                                    <img src="{{ asset('storage/profile/' . Auth::user()->image) }}" alt="img"
+                                    <img src="{{ asset('storage/profile/' . Auth::user()->photo) }}" alt="img"
                                         class="rounded-circle" height="150px" width="150" id="myImg">
                                 @endif
 
@@ -143,7 +143,7 @@
                             <form wire:submit.prevent="updateImage" class="form-group mt-3">
                                 <div class="row">
                                     <div class="col-8">
-                                        <input type="file" wire:model="image" class="form-control"
+                                        <input type="file" wire:model="photo" class="form-control"
                                             accept=".png, .jpg, .jpeg">
                                     </div>
                                     <div class="col">
@@ -184,7 +184,7 @@
                             </script>
 
                             <div class="mt-3">
-                                <h4>{{ $nama }}</h4>
+                                <h4>{{ $name }}</h4>
                                 <p class="text-secondary mb-1">{{ $email }}
                                     <p class="text-muted font-size-sm">{{ $level }}</p>
                             </div>
@@ -236,10 +236,10 @@
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input type="text" wire:model="nama"
-                                        class="form-control @error('nama') is-invalid @enderror" placeholder=""
+                                    <input type="text" wire:model="name"
+                                        class="form-control @error('name') is-invalid @enderror" placeholder=""
                                         disabled required>
-                                    @error('nama')
+                                    @error('name')
                                         <span class="invalid-feedback">
                                             <strong>{{ $message }}</strong>
                                         </span>

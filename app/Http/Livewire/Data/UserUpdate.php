@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class UserUpdate extends Component
 {
-    public $email, $nisn, $nis, $nama, $no_telp, $alamat, $spp_id, $ruang_id, $tahun, $nominal, $nama_kelas, $kopetensi_keahlian, $siswaId;
+    public $email, $nisn, $nis, $name, $no_telp, $alamat, $spp_id, $ruang_id, $tahun, $nominal, $nama_kelas, $kopetensi_keahlian, $siswaId;
 
      // lintening
      protected $listeners = [
@@ -35,7 +35,7 @@ class UserUpdate extends Component
             $this->ruang_id = $data['ruang_id'];
             $this->nisn = $data['nisn'];
             $this->nis = $data['nis'];
-            $this->nama = $data['nama'];
+            $this->name = $data['name'];
             $this->no_telp = $data['no_telp'];
             $this->alamat = $data['alamat'];
             $this->tahun = $data['tahun'];
@@ -55,7 +55,7 @@ class UserUpdate extends Component
         $this->validate([
             'nisn' => 'required|min:5|max:13|string',
             'nis' => 'required|min:5|max:13|string',
-            'nama' => 'required|min:5|max:50|string',
+            'name' => 'required|min:5|max:50|string',
             'no_telp' => 'required|min:5|max:20|string',
             'alamat' => 'required|min:5|max:70|string',
             'spp_id' => 'required',
@@ -69,7 +69,7 @@ class UserUpdate extends Component
         User::join('spps', 'users.spp_id', 'spps.id')->leftJoin('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $this->siswaId)->update([
             'nisn' => $this->nisn,
             'nis' => $this->nis,
-            'nama' => $this->nama,
+            'name' => $this->name,
             'no_telp' => $this->no_telp,
             'alamat' => $this->alamat,
             'spp_id' => $this->spp_id,
@@ -89,7 +89,7 @@ class UserUpdate extends Component
         $this->siswaId = null;
         $this->nisn = null;
         $this->nis = null;
-        $this->nama = null;
+        $this->name = null;
         $this->no_telp = null;
         $this->alamat = null;
         $this->spp_id = null;
