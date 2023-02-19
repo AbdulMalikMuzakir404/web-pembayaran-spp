@@ -9,10 +9,10 @@ use App\Models\pembayaran;
 
 class UpdateTransaksi extends Component
 {
-    public $nisn, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $spp_id, $transaksiId;
+    public $nisn, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $jumlah_bayar_update, $spp_id, $transaksiId, $bln;
 
     protected $listeners = [
-        'passing-update-data-transaksi' => 'showDataTransaksi'
+        'passing-update-data-transaksi' => 'showDataTransaksi',
     ];
 
     public function render()
@@ -49,19 +49,79 @@ class UpdateTransaksi extends Component
             'tgl_dibayar' => 'required|max:3|string',
             'bln_dibayar' => 'required|max:15|string',
             'thn_dibayar' => 'required|max:5|string',
-            'jumlah_bayar' => 'required|min:3|max:40|string',
+            'jumlah_bayar_update' => 'required|min:3|max:40|string',
             'spp_id' => 'required',
         ]);
 
+        switch ($this->bln_dibayar) {
+            case 'January':
+                $this->bln = 1;
+                break;
+            case 'February':
+                $this->bln = 2;
+                break;
+            case 'Maret':
+                $this->bln = 3;
+                break;
+            case 'April':
+                $this->bln = 4;
+                break;
+            case 'Mei':
+                $this->bln = 5;
+                break;
+            case 'Juni':
+                $this->bln = 6;
+                break;
+            case 'Juli':
+                $this->bln = 7;
+                break;
+            case 'Agustus':
+                $this->bln = 8;
+                break;
+            case 'Desember':
+                $this->bln = 9;
+                break;
+            case 'Oktober':
+                $this->bln = 10;
+                break;
+            case 'November':
+                $this->bln = 11;
+                break;
+            case 'Desember':
+                $this->bln = 12;
+                break;
+        }
+
+        $cek = spp::whereMonth('tahun', $this->bln)->whereYear('tahun', $this->thn_dibayar)->get('nominal');
+        
+        foreach($cek as $data) {
+            if(intval($this->jumlah_bayar + $this->jumlah_bayar_update) > intval($data['nominal'])) {
+                $this->clearDataUpdateTransaksi();
+                return redirect()->route('dataTransaksi')->with('error', 'failed to updated data!');
+            }
+        }
+
+        $nama_pengelola = Auth()->user()->name;
+        
         pembayaran::find($this->transaksiId)->update([
             'nisn' => $this->nisn,
             'spp_id' => $this->spp_id,
             'tgl_dibayar' => $this->tgl_dibayar,
             'bln_dibayar' => $this->bln_dibayar,
             'thn_dibayar' => $this->thn_dibayar,
-            'jumlah_bayar' => $this->jumlah_bayar
+            'jumlah_bayar' => intval($this->jumlah_bayar) + intval($this->jumlah_bayar_update),
+            'nama_pengelola' => $nama_pengelola,
         ]);
+
+        $total_bayar = User::where('nisn', $this->nisn)->get('total_bayar');
+        foreach($total_bayar as $bayar) {
+                $totalBayarUpdate = intval($bayar['total_bayar']) - intval($this->jumlah_bayar_update);
+        }
         
+        User::where('nisn', $this->nisn)->update([
+            'total_bayar' => $totalBayarUpdate
+        ]);
+
         $this->clearDataUpdateTransaksi();
         $this->emit('success-update-data-transaksi');
     }

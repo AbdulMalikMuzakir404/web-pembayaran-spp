@@ -30,9 +30,11 @@ class MakePetugas extends Component
     public function render()
     {
         return view('livewire.data.make-petugas', [
-            'petugas' => $this->search == null ? user::where('level', 'petugas')
+            'petugas' => $this->search == null ? user::orderBy('name')
+            ->where('level', 'petugas')
             ->paginate($this->paginate) :
-            user::where('level', 'petugas')
+            user::orderBy('name')
+            ->where('level', 'petugas')
             ->where('name', 'like', '%' . $this->search . '%')
             ->paginate($this->paginate),
         ]);

@@ -42,8 +42,8 @@ class DataCreate extends Component
     public function render()
     {
         return view('livewire.data.data-create', [
-            'data_spp' => $this->search_spp == null ? spp::paginate($this->paginate_spp) : spp::where('tahun', 'like', '%' . $this->search_spp . '%')->paginate($this->paginate_spp),
-            'data_kelas' => $this->search_kelas == null ? ruang::paginate($this->paginate_kelas) : spp::where('nama_kelas', 'like', '%' . $this->search_kelas . '%')->paginate($this->paginate_kelas)
+            'data_spp' => $this->search_spp == null ? spp::orderBy('tahun')->paginate($this->paginate_spp) : spp::orderBy('tahun')->where('tahun', 'like', '%' . $this->search_spp . '%')->paginate($this->paginate_spp),
+            'data_kelas' => $this->search_kelas == null ? ruang::orderBy('nama_kelas')->paginate($this->paginate_kelas) : spp::orderBy('nama_kelas')->where('nama_kelas', 'like', '%' . $this->search_kelas . '%')->paginate($this->paginate_kelas)
         ]);
     }
 
@@ -111,6 +111,12 @@ class DataCreate extends Component
             'nominal' => 'required|max:30'
         ]);
 
+        $cekSpp = spp::where('tahun', $this->tahun)->get();
+
+        if(count($cekSpp) >= 1) {
+            dd('error');
+        }
+        
         spp::create([
             'tahun' => $this->tahun,
             'nominal' => $this->nominal
@@ -133,6 +139,12 @@ class DataCreate extends Component
             'nama_kelas' => 'required|string|max:50',
             'kopetensi_keahlian' => 'required|max:10'
         ]);
+
+        $cekKelas = ruang::where('nama_kelas', $this->nama_kelas)->where('kopetensi_keahlian', $this->kopetensi_keahlian)->get();
+        
+        if(count($cekKelas) >= 1) {
+            dd('error');
+        }
 
         ruang::create([
             'nama_kelas' => $this->nama_kelas,

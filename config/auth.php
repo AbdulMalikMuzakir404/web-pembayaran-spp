@@ -41,10 +41,15 @@ return [
             'provider' => 'users',
         ],
 
-        'staf' => [
-            'driver' => 'session',
-            'provider' => 'stafs',
-        ],
+        // 'login_siswa' => [
+        //     'driver' => 'session',
+        //     'provider' => 'siswa',
+        // ],
+
+        // 'staf' => [
+        //     'driver' => 'session',
+        //     'provider' => 'stafs',
+        // ],
     ],
 
     /*
@@ -70,10 +75,17 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'stafs' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\staf::class,
-        ],
+        // 'siswa' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\User::class,
+        //     'table' => 'users',
+        //     'nisn' => 'nisn',
+        // ],
+
+        // 'stafs' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\staf::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',

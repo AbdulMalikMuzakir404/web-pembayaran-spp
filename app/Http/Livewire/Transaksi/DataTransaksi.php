@@ -21,7 +21,7 @@ class DataTransaksi extends Component
 
     public $status_pembayaran = null;
 
-    public $nisn, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $spp_id;
+    public $nisn, $name, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $spp_id, $bln;
 
     protected $listeners = [
         'success-create-data-transaksi' => 'handleCreateDataTransaksi',
@@ -29,23 +29,64 @@ class DataTransaksi extends Component
         'success-delete-data-transaksi'=> 'handleDeleteDataTransaksi',
         'success-update-status-pembayaran' => 'handleUpdateStatusPembayaran',
         'success-delete-transaksi' => 'handleDeleteTransaksi',
-        'add-data-transaksi' => 'handleAddTransaksi'
+        'add-data-transaksi' => 'handleAddTransaksi',
+        'otomatis-change-status-pembayaran-lunas' => 'handleOtomatisChangeLunas',
+        'otomatis-change-status-pembayaran-belum-lunas' => 'handleOtomatisChangeBelumLunas'
     ];
+
+    public function mount()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+
+        $pembayaran = pembayaran::join('spps', 'pembayarans.spp_id', 'spps.id')
+            ->join('users', 'pembayarans.nisn', 'users.nisn')
+            ->get()->toArray();
+
+            foreach($pembayaran as $pem) {
+                if($pem['nominal'] <= $pem['jumlah_bayar']) {
+                    pembayaran::where('pembayarans.nisn', $pem['nisn'])->where('tgl_dibayar', $pem['tgl_dibayar'])->where('bln_dibayar', $pem['bln_dibayar'])->where('thn_dibayar', $pem['thn_dibayar'])->update([
+                        'status_pembayaran' => 1
+                    ]);
+
+                    $this->emit('otomatis-change-status-pembayaran-lunas');
+
+                } elseif($pem['nominal'] > $pem['jumlah_bayar']) {
+                    pembayaran::where('pembayarans.nisn', $pem['nisn'])->where('tgl_dibayar', $pem['tgl_dibayar'])->where('bln_dibayar', $pem['bln_dibayar'])->where('thn_dibayar', $pem['thn_dibayar'])->update([
+                        'status_pembayaran' => 0
+                    ]);
+
+                    $this->emit('otomatis-change-status-pembayaran-belum-lunas');
+                }
+            }
+    }
 
     public function render()
     {
         return view('livewire.transaksi.data-transaksi', [
             'datas' => User::where('level', 'siswa')->get(),
             'dataSpp' => spp::get(),
-            'transaksi' => $this->search == null ? pembayaran::join('spps', 'pembayarans.spp_id', 'spps.id')
+            'transaksi' => $this->search == null ? pembayaran::orderBy('name')
+            ->join('spps', 'pembayarans.spp_id', 'spps.id')
             ->join('users', 'pembayarans.nisn', 'users.nisn')
             ->paginate($this->paginate) :
-            pembayaran::join('spps', 'pembayarans.spp_id', 'spps.id')
+            pembayaran::orderBy('name')
+            ->join('spps', 'pembayarans.spp_id', 'spps.id')
             ->join('users', 'pembayarans.nisn', 'users.nisn')
             ->where('name', 'like', '%' . $this->search . '%')
             ->where('status_pembayaran', $this->status_pembayaran)
             ->paginate($this->paginate),
         ]);
+    }
+
+    public function handleOtomatisChangeLunas()
+    {
+        //
+    }
+
+    public function handleOtomatisChangeBelumLunas()
+    {
+        //
     }
 
     public function handleAddTransaksi()
@@ -55,16 +96,16 @@ class DataTransaksi extends Component
 
     public function handleCreateDataTransaksi()
     {
-        //
+        return redirect()->route('dataTransaksi')->with('success', 'Data successfully added');
     }
     public function handleUpdateDataTransaksi()
     {
-        //
+        return redirect()->route('dataTransaksi')->with('success', 'Successfully changed data');
     }
 
     public function handleDeleteDataTransaksi()
     {
-        //
+        return redirect()->route('dataTransaksi')->with('success', 'Successfully deleted data');
     }
 
     public function handleUpdateStatusPembayaran()
@@ -81,6 +122,7 @@ class DataTransaksi extends Component
     {
         $this->validate([
             'nisn' => 'required|min:5|max:13',
+            'name' => 'required|min:5|max:50',
             'tgl_dibayar' => 'required|max:15',
             'bln_dibayar' => 'required|max:15',
             'thn_dibayar' => 'required|max:5',
@@ -88,18 +130,77 @@ class DataTransaksi extends Component
             'spp_id' => 'required'
         ]);
 
-        $id = Auth()->user()->id;
+        switch ($this->bln_dibayar) {
+            case 'January':
+                $this->bln = 1;
+                break;
+            case 'February':
+                $this->bln = 2;
+                break;
+            case 'Maret':
+                $this->bln = 3;
+                break;
+            case 'April':
+                $this->bln = 4;
+                break;
+            case 'Mei':
+                $this->bln = 5;
+                break;
+            case 'Juni':
+                $this->bln = 6;
+                break;
+            case 'Juli':
+                $this->bln = 7;
+                break;
+            case 'Agustus':
+                $this->bln = 8;
+                break;
+            case 'Desember':
+                $this->bln = 9;
+                break;
+            case 'Oktober':
+                $this->bln = 10;
+                break;
+            case 'November':
+                $this->bln = 11;
+                break;
+            case 'Desember':
+                $this->bln = 12;
+                break;
+        }
 
+        $cek = spp::whereMonth('tahun', $this->bln)->whereYear('tahun', $this->thn_dibayar)->get('nominal');
+        
+        foreach($cek as $data) {
+            if(intval($this->jumlah_bayar) > intval($data['nominal'])) {
+                $this->clearDataCreateTransaksi();
+                return redirect()->route('dataTransaksi')->with('error', 'failed to updated data!');
+            }
+        }
+
+        $nama_pengelola = Auth()->user()->name;
+        
         pembayaran::create([
             'nisn' => $this->nisn,
+            'nama_siswa' => $this->name,
             'tgl_dibayar' => $this->tgl_dibayar,
             'bln_dibayar' => $this->bln_dibayar,
             'thn_dibayar' => $this->thn_dibayar,
             'jumlah_bayar' => $this->jumlah_bayar,
             'spp_id' => $this->spp_id,
-            'user_id' => $id,
+            'nama_pengelola' => $nama_pengelola,
             'status_pembayaran' => 0
         ]);
+
+        $total_bayar = User::where('nisn', $this->nisn)->get('total_bayar');
+        foreach($total_bayar as $bayar) {
+                $totalBayarUpdate = intval($bayar['total_bayar']) - intval($this->jumlah_bayar);
+        }
+        
+        User::where('nisn', $this->nisn)->update([
+            'total_bayar' => $totalBayarUpdate
+        ]);
+        
 
         $this->clearDataCreateTransaksi();
         $this->emit('success-create-data-transaksi');

@@ -118,13 +118,13 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Jumlah Bayar</h6>
+                                <h6 class="mb-0">Jumlah Bayar Update</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" wire:model.lazy="jumlah_bayar"
-                                    class="form-control @error('jumlah_bayar') is-invalid @enderror"
-                                    placeholder="Jumlah Bayar" required>
-                                @error('jumlah_bayar')
+                                <input type="text" wire:model.lazy="jumlah_bayar_update"
+                                    class="form-control @error('jumlah_bayar_update') is-invalid @enderror"
+                                    placeholder="Jumlah Bayar Update" required>
+                                @error('jumlah_bayar_update')
                                     <span class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </span>

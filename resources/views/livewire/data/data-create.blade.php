@@ -147,6 +147,7 @@
                           </thead>
                           <tbody>
                             @php
+                            $arry = [];
                                 $no = 0;
                             @endphp
                             @foreach ($data_spp as $dataSpp)
@@ -163,9 +164,18 @@
                                 <button wire:click="deleteSpp({{ $dataSpp->id }})" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                               </td>
                             </tr>
+                            <div class="mt-2">
+                                @php
+                                    $arr = array_push($arry, $dataSpp->nominal);
+                                @endphp
+                            </div>
                             @endforeach
                           </tbody>
                     </table>
+                    <div class="mt-2">
+                        {{-- {{ dd($arr) }} --}}
+                        <p>{{ count($arry) >= 12 ? 'Total ' : '' }}Nominal SPP Tahun {{ date('Y') }} : {{ array_sum($arry) }}</p>
+                    </div>
                     <div class="mt-2">
                         {{ $data_spp->links() }}
                     </div>

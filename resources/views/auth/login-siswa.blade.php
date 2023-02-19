@@ -52,7 +52,7 @@
             <div class="card-body login-card-body">
                 <h5 class="login-box-msg mb-3">MASUK</h5>
 
-                <form action="{{ route('loginSiswaProcess') }}" method="post">
+                <form action="{{ route('loginSiswaProses') }}" method="post">
                     <figure><img src="{{ asset('storage/images/logo_aplikasi.png') }}" alt="logo"
                             class="rounded-circle img-responsive" width="150" height="150"></figure>
                     <p class="login-box-msg mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim,
@@ -74,7 +74,7 @@
                         <div class="form-group py-2">
                             <label for="nis"><i class="bi bi-lock"></i></label>
                             <input type="password" class="@error('nis') is-invalid @enderror" id="nis"
-                                name="nis" placeholder="NIS" required autocomplete="current-nis">
+                                name="password" placeholder="NIS" required autocomplete="current-passsword">
                             @error('nis')
                                 <script>
                                     toastr.error("{{ $message }}")
@@ -113,18 +113,9 @@
 
                 <div class="row">
                     <div class="col">
-                        @if (Route::has('password.request'))
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                {{ __('Forgot password?') }}
+                            <a class="btn btn-link" href="{{ route('login') }}">
+                                {{ __('Back') }}
                             </a>
-                        @endif
-                    </div>
-                    <div class="col">
-                        @if (Route::has('register'))
-                            <a class="btn btn-link" href="{{ route('register') }}">
-                                {{ __('Create new akun?') }}
-                            </a>
-                        @endif
                     </div>
                 </div>
 

@@ -20,14 +20,12 @@ return new class extends Migration
             $table->index('nisn');
             $table->foreign('nisn')->references('nisn')->on('users')->onDelete('cascade');
 
-            $table->unsignedBigInteger('user_id');
-            $table->index('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
             $table->unsignedBigInteger('spp_id');
             $table->index('spp_id');
             $table->foreign('spp_id')->references('id')->on('spps')->onDelete('cascade');
 
+            $table->string('nama_siswa', 50);
+            $table->string('nama_pengelola', 50);
             $table->string('tgl_dibayar', 5);
             $table->string('bln_dibayar', 15);
             $table->string('thn_dibayar', 10);

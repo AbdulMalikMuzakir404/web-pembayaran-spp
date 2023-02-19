@@ -1,6 +1,7 @@
 <div class="container">
     <div class="row gutters-sm">
 
+        @canany('pengelola')
         @if ($status_transaksi)
             @livewire('transaksi.update-transaksi')
         @else
@@ -25,10 +26,31 @@
                                                 <option selected="selected">NISN</option>
                                                 @foreach ($datas as $data)
                                                     <option value="{{ $data->nisn }}">
-                                                        {{ $data->name . ' - ' . $data->nisn }}</option>
+                                                        {{ $data->nisn . ' - ' . $data->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('nisn')
+                                                <span class="invalid-feedback">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Nama Siswa</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <select aria-label="Default select example" wire:model.lazy="name"
+                                                class="@error('name') is-invalid @enderror form-select"
+                                                value="{{ old('name') }}" required>
+                                                <option selected="selected">Nama Siswa</option>
+                                                @foreach ($datas as $data)
+                                                    <option value="{{ $data->name }}">
+                                                        {{ $data->name . ' - ' . $data->nisn }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('name')
                                                 <span class="invalid-feedback">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -151,6 +173,7 @@
                 </div>
             </div>
         @endif
+        @endcanany
 
         <div class="col-md-12 mb-3">
             <div class="card">
@@ -173,9 +196,6 @@
                         <div class="col">
                             <input wire:model="search" type="text" class="form-control w-auto" placeholder="Seacrh">
                         </div>
-                        <div class="col">
-                            <button class="btn btn-secondary">Export to PDF</button>
-                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -185,12 +205,16 @@
                                 <th scope="col">No</th>
                                 <th scope="col">NISN</th>
                                 <th scope="col">Nama Pengelola</th>
-                                <th scope="col">Nama</th>
+                                <th scope="col">Nama Siswa</th>
                                 <th scope="col">Tanggal Bayar</th>
                                 <th scope="col">Bulan Bayar</th>
                                 <th scope="col">Tahun Bayar</th>
                                 <th scope="col">Jumah Bayar</th>
                                 <th scope="col">Data SPP</th>
+                                <th scope="col">Tunggakan Perbulan</th>
+                                <th scope="col">Tunggakan Pertahun</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Updated</th>
                                 <th scope="col">Status Pembayaran</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -206,13 +230,17 @@
                                 <tr>
                                     <th scope="row">{{ $no }}</th>
                                     <td>{{ $dataTransaksi->nisn }}</td>
-                                    <td>{{ $dataTransaksi->user_id }}</td>
-                                    <td>{{ $dataTransaksi->name }}</td>
+                                    <td>{{ $dataTransaksi->nama_pengelola }}</td>
+                                    <td>{{ $dataTransaksi->nama_siswa }}</td>
                                     <td>{{ $dataTransaksi->tgl_dibayar }}</td>
                                     <td>{{ $dataTransaksi->bln_dibayar }}</td>
                                     <td>{{ $dataTransaksi->thn_dibayar }}</td>
                                     <td>{{ $dataTransaksi->jumlah_bayar }}</td>
                                     <td>{{ $dataTransaksi->tahun . " - Rp." . $dataTransaksi->nominal }}</td>
+                                    <td>{{ "Rp." . $dataTransaksi->nominal - $dataTransaksi->jumlah_bayar }}</td>
+                                    <td>{{ "Rp." . $dataTransaksi->total_bayar }}</td>
+                                    <td>{{ $dataTransaksi->created_at }}</td>
+                                    <td>{{ $dataTransaksi->updated_at }}</td>
                                     @if ($dataTransaksi->status_pembayaran == 1)
                                         <td>
                                             <button disabled class="btn-sm btn-primary"
@@ -236,7 +264,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
+                            </tbody>
                     </table>
                     <div class="mt-2">
                         {{ $transaksi->links() }}

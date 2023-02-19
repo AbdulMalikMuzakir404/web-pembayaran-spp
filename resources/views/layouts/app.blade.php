@@ -154,7 +154,7 @@
                             </a>
                         </li>
 
-                        @can('admin')
+                        @can('pengelola')
                         <li class="nav-item">
                             <a href="{{ route('dataTransaksi') }}" class="nav-link">
                                 <i class="nav-icon bi bi-bank"></i>
@@ -163,7 +163,9 @@
                                 </p>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('admin')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-table"></i>

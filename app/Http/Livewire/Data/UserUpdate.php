@@ -19,7 +19,7 @@ class UserUpdate extends Component
     public function render()
     {
         return view('livewire.data.user-update', [
-            'spp' => spp::get(),
+            // 'spp' => spp::get(),
             'ruang' => ruang::get()
         ]);
     }
@@ -28,7 +28,7 @@ class UserUpdate extends Component
     {
         $this->siswaId = $id;
 
-        $find = User::join('spps', 'users.spp_id', 'spps.id')->leftJoin('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $id)->get();
+        $find = User::join('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $id)->get();
 
         foreach($find as $data){
             $this->spp_id = $data['spp_id'];
@@ -53,29 +53,29 @@ class UserUpdate extends Component
     public function updateDataSiswa()
     {
         $this->validate([
-            'nisn' => 'required|min:5|max:13|string',
+            // 'nisn' => 'required|min:5|max:13|string',
             'nis' => 'required|min:5|max:13|string',
             'name' => 'required|min:5|max:50|string',
             'no_telp' => 'required|min:5|max:20|string',
             'alamat' => 'required|min:5|max:70|string',
-            'spp_id' => 'required',
+            // 'spp_id' => 'required',
             'ruang_id' => 'required',
-            'tahun' => 'required|date',
-            'nominal' => 'required|max:30',
+            // 'tahun' => 'required|date',
+            // 'nominal' => 'required|max:30',
             'nama_kelas' => 'required|max:10',
             'kopetensi_keahlian' => 'required|max:20',
         ]);
 
-        User::join('spps', 'users.spp_id', 'spps.id')->leftJoin('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $this->siswaId)->update([
-            'nisn' => $this->nisn,
+        User::join('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $this->siswaId)->update([
+            // 'nisn' => $this->nisn,
             'nis' => $this->nis,
             'name' => $this->name,
             'no_telp' => $this->no_telp,
             'alamat' => $this->alamat,
-            'spp_id' => $this->spp_id,
+            // 'spp_id' => $this->spp_id,
             'ruang_id' => $this->ruang_id,
-            'tahun' => $this->tahun,
-            'nominal' => $this->nominal,
+            // 'tahun' => $this->tahun,
+            // 'nominal' => $this->nominal,
             'nama_kelas' => $this->nama_kelas,
             'kopetensi_keahlian' => $this->kopetensi_keahlian,
         ]);

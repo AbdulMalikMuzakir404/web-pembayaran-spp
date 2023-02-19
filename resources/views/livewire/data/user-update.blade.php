@@ -14,7 +14,7 @@
                             <div class="col-sm-9 text-secondary">
                                 <input type="text" wire:model.lazy="nisn"
                                     class="form-control @error('nisn') is-invalid @enderror" placeholder="NISN"
-                                    required>
+                                    required disabled>
                                 @error('nisn')
                                     <span class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
@@ -37,7 +37,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="row mt-3">
+                        {{-- <div class="row mt-3">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Spp Id</h6>
                             </div>
@@ -56,7 +56,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row mt-3">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Kelas Id</h6>

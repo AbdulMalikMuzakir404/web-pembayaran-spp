@@ -43,7 +43,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="row mt-3">
+                                {{-- <div class="row mt-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Spp Id</h6>
                                     </div>
@@ -62,7 +62,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row mt-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Kelas Id</h6>
@@ -166,7 +166,6 @@
                                 <th scope="col">No</th>
                                 <th scope="col">NISN</th>
                                 <th scope="col">NIS</th>
-                                <th scope="col">SPP</th>
                                 <th scope="col">Kelas</th>
                                 <th scope="col">Nama Lengkap</th>
                                 <th scope="col">Phone</th>
@@ -186,7 +185,6 @@
                               <th scope="row">{{ $no }}</th>
                               <td>{{ $dataSiswa->nisn }}</td>
                               <td>{{ $dataSiswa->nis }}</td>
-                              <td>{{ $dataSiswa->tahun . " - " . $dataSiswa->nominal }}</td>
                               <td>{{ $dataSiswa->nama_kelas . " - " . $dataSiswa->kopetensi_keahlian }}</td>
                               <td>{{ $dataSiswa->name }}</td>
                               <td>{{ $dataSiswa->no_telp }}</td>

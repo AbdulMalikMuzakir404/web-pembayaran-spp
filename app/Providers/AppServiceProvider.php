@@ -36,5 +36,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('siswa', function (User $user) {
             return $user->level === "siswa";
         });
+
+        Gate::define('pengelola', function (User $user) {
+            return $user->level !== "siswa";
+        });
     }
 }

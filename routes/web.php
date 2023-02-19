@@ -8,6 +8,7 @@ use App\Http\Controllers\data\makeUserController;
 use App\Http\Controllers\Auth\LoginSiswaController;
 use App\Http\Controllers\profile\profileController;
 use App\Http\Controllers\transaksi\transaksiController;
+use App\Http\Controllers\PDF\adminCreateLaporanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ Route::get('register', [registerController::class, 'registerForm'])->name('regis
 // Route::post('register/action', [registerController::class, 'registerAction'])->name('registerAction');
 
 Route::get('login-siswa', [LoginSiswaController::class, 'showLoginForm'])->name('loginSiswa');
-Route::post('login-siswa', [LoginSiswaController::class, 'loginSiswa'])->name('loginSiswaProcess');
+Route::post('login-siswa', [LoginSiswaController::class, 'loginSiswa'])->name('loginSiswaProses');
 
 // Route::get('/logout', function() {
 //     if(session()->has('user')){
@@ -42,9 +43,9 @@ Route::post('login-siswa', [LoginSiswaController::class, 'loginSiswa'])->name('l
 // });
 
 
-Route::get('/home', function () {
-    return "home";
-})->name('home')->middleware('login');
+// Route::get('/home', function () {
+//     return "home";
+// })->name('home')->middleware('login');
 
 
 Auth::routes();
@@ -59,6 +60,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/home/make-petugas', [makeUserController::class, 'showFormPetugas'])->name('makePetugas')->middleware('admin');
         Route::get('/home/data-create', [makeUserController::class, 'showDataCreate'])->name('dataCreate')->middleware('admin');
 
-        Route::get('/home/transaksi', [transaksiController::class, 'showDataTransaksi'])->name('dataTransaksi')->middleware('admin');
+        Route::get('/home/transaksi', [transaksiController::class, 'showDataTransaksi'])->name('dataTransaksi')->middleware('pengelola');
+
+        Route::get('/home/create-transaksi-laporan', [adminCreateLaporanController::class, 'createTransaksiLaporan'])->name('createTransaksiLaporan')->middleware('admin');
     });
 });

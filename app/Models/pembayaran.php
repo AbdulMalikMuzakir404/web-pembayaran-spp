@@ -16,8 +16,9 @@ class pembayaran extends Model
         'thn_dibayar',
         'jumlah_bayar',
         'spp_id',
-        'user_id',
-        'status_pembayaran'
+        'nama_pengelola',
+        'status_pembayaran',
+        'nama_siswa'
     ];
 
     protected $hidden = [
