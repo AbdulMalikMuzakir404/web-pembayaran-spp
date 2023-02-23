@@ -10,6 +10,8 @@ class PetugasUpdate extends Component
 {
     public $email, $name, $username, $password, $petugasId;
 
+    public $isLoading = false;
+
     // lintening
     protected $listeners = [
         'passing-update-data-petugas' => 'showDataPetugas',
@@ -20,9 +22,14 @@ class PetugasUpdate extends Component
         return view('livewire.data.petugas-update');
     }
 
-    public function addPetugas()
+    public function submit()
     {
-        $this->emit('add-data-petugas');
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
     }
 
     public function showDataPetugas($data)
@@ -48,6 +55,7 @@ class PetugasUpdate extends Component
             'username' => $this->username
         ]);
 
+        return redirect()->route('makePetugas')->with('success', 'Officer data successfully changed');
         $this->clearDataUpdatePetugas();
         $this->emit('success-update-data-petugas');
     }
@@ -59,5 +67,11 @@ class PetugasUpdate extends Component
         $this->name = null;
         $this->username = null;
         $this->password = null;
+    }
+
+    public function addPetugas()
+    {
+        $this->clearDataUpdatePetugas();
+        $this->emit('add-data-petugas');
     }
 }

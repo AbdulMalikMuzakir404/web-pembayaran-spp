@@ -126,8 +126,17 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-info">Save and Change</button>
-                            <button wire:click="addSiswa()" class="btn btn-primary">Add</button>
+                            <button type="submit" wire:click="submit" class="btn btn-info">
+                                <div wire:loading wire:target="submit">
+                                    <div class="la-ball-fall">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                                Save and Change
+                            </button>
+                            <button wire:click="addSiswa()" class="btn btn-primary"><i class="bi bi-plus-square"></i></button>
                         </div>
                     </div>
                 </div>

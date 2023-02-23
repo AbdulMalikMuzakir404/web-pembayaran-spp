@@ -9,6 +9,8 @@ class KelasUpdate extends Component
 {
     public $nama_kelas, $kopetensi_keahlian, $kelasId;
 
+    public $isLoading = false;
+
     // lintening
     protected $listeners = [
         'passing-update-data-kelas' => 'showDataKelas'
@@ -17,6 +19,16 @@ class KelasUpdate extends Component
     public function render()
     {
         return view('livewire.data.kelas-update');
+    }
+
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
     }
 
     public function showDataKelas($data_kelas)
@@ -29,15 +41,23 @@ class KelasUpdate extends Component
     public function updateDataKelas()
     {
         $this->validate([
-            'nama_kelas' => 'required|string|max:50|unique:ruangs',
+            'nama_kelas' => 'required|string|max:50',
             'kopetensi_keahlian' => 'required|max:10'
         ]);
+
+        $cekKelas = ruang::where('nama_kelas', $this->nama_kelas)->where('kopetensi_keahlian', $this->kopetensi_keahlian)->get();
+
+        if(count($cekKelas) >= 1) {
+            return redirect()->route('dataCreate')->with('error', 'Room data already exists!');
+        }
 
         ruang::where('id', $this->kelasId)->update([
             'nama_kelas' => $this->nama_kelas,
             'kopetensi_keahlian' => $this->kopetensi_keahlian
         ]);
 
+
+        return redirect()->route('dataCreate')->with('success', 'room data successfully changed');
         $this->clearDataUpdateKelas();
         $this->emit('success-update-data-kelas');
     }
@@ -51,6 +71,7 @@ class KelasUpdate extends Component
 
     public function addKelas()
     {
+        $this->clearDataUpdateKelas();
         $this->emit('add-data-kelas');
     }
 }

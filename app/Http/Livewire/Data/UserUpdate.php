@@ -3,13 +3,16 @@
 namespace App\Http\Livewire\Data;
 
 use App\Models\spp;
-use App\Models\ruang;
 use App\Models\User;
+use App\Models\ruang;
 use Livewire\Component;
+use Illuminate\Support\Facades\Hash;
 
 class UserUpdate extends Component
 {
-    public $email, $nisn, $nis, $name, $no_telp, $alamat, $spp_id, $ruang_id, $tahun, $nominal, $nama_kelas, $kopetensi_keahlian, $siswaId;
+    public $email, $nisn, $nis, $name, $no_telp, $alamat, $spp_id, $ruang_id, $nama_kelas, $kopetensi_keahlian, $siswaId;
+
+    public $isLoading = false;
 
      // lintening
      protected $listeners = [
@@ -22,6 +25,16 @@ class UserUpdate extends Component
             // 'spp' => spp::get(),
             'ruang' => ruang::get()
         ]);
+    }
+
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
     }
 
     public function showDataSiswa($id)
@@ -38,48 +51,35 @@ class UserUpdate extends Component
             $this->name = $data['name'];
             $this->no_telp = $data['no_telp'];
             $this->alamat = $data['alamat'];
-            $this->tahun = $data['tahun'];
-            $this->nominal = $data['nominal'];
             $this->nama_kelas = $data['nama_kelas'];
             $this->kopetensi_keahlian = $data['kopetensi_keahlian'];
         }
     }
 
-    public function addSiswa()
-    {
-        $this->emit('add-data-siswa');
-    }
-
     public function updateDataSiswa()
     {
         $this->validate([
-            // 'nisn' => 'required|min:5|max:13|string',
             'nis' => 'required|min:5|max:13|string',
             'name' => 'required|min:5|max:50|string',
             'no_telp' => 'required|min:5|max:20|string',
             'alamat' => 'required|min:5|max:70|string',
-            // 'spp_id' => 'required',
             'ruang_id' => 'required',
-            // 'tahun' => 'required|date',
-            // 'nominal' => 'required|max:30',
             'nama_kelas' => 'required|max:10',
             'kopetensi_keahlian' => 'required|max:20',
         ]);
 
         User::join('ruangs', 'users.ruang_id', 'ruangs.id')->where('users.id', $this->siswaId)->update([
-            // 'nisn' => $this->nisn,
             'nis' => $this->nis,
+            'password' => Hash::make($this->nis),
             'name' => $this->name,
             'no_telp' => $this->no_telp,
             'alamat' => $this->alamat,
-            // 'spp_id' => $this->spp_id,
             'ruang_id' => $this->ruang_id,
-            // 'tahun' => $this->tahun,
-            // 'nominal' => $this->nominal,
             'nama_kelas' => $this->nama_kelas,
             'kopetensi_keahlian' => $this->kopetensi_keahlian,
         ]);
 
+        return redirect()->route('makeSiswa')->with('success', 'student data successfully changed');
         $this->clearDataUpdateSiswa();
         $this->emit('success-update-data-siswa');
     }
@@ -94,9 +94,13 @@ class UserUpdate extends Component
         $this->alamat = null;
         $this->spp_id = null;
         $this->ruang_id = null;
-        $this->tahun = null;
-        $this->nominal = null;
         $this->nama_kelas = null;
         $this->kopetensi_keahlian = null;
+    }
+
+    public function addSiswa()
+    {
+        $this->clearDataUpdateSiswa();
+        $this->emit('add-data-siswa');
     }
 }

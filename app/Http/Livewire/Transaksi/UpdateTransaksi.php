@@ -9,8 +9,10 @@ use App\Models\pembayaran;
 
 class UpdateTransaksi extends Component
 {
-    public $nisn, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $jumlah_bayar_update, $spp_id, $transaksiId, $bln;
+    public $nisn, $name, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $jumlah_bayar_update, $spp_id, $transaksiId, $bln;
 
+    public $isLoading = false;
+    
     protected $listeners = [
         'passing-update-data-transaksi' => 'showDataTransaksi',
     ];
@@ -34,6 +36,7 @@ class UpdateTransaksi extends Component
         {
             $this->transaksiId = $transaksi['id'];
             $this->nisn = $transaksi['nisn'];
+            $this->name = $transaksi['name'];
             $this->tgl_dibayar = $transaksi['tgl_dibayar'];
             $this->bln_dibayar = $transaksi['bln_dibayar'];
             $this->thn_dibayar = $transaksi['thn_dibayar'];
@@ -42,16 +45,37 @@ class UpdateTransaksi extends Component
         }
     }
 
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
+    }
+
     public function updateDataTransaksi()
     {
         $this->validate([
             'nisn' => 'required|min:5|max:13|string',
+            'name' => 'required|min:5|max:50',
             'tgl_dibayar' => 'required|max:3|string',
             'bln_dibayar' => 'required|max:15|string',
             'thn_dibayar' => 'required|max:5|string',
             'jumlah_bayar_update' => 'required|min:3|max:40|string',
             'spp_id' => 'required',
         ]);
+
+        $cekNisn = user::where('nisn', $this->nisn)->where('level', 'siswa')->get('name')->toArray();
+        foreach($cekNisn as $name)
+        {
+            $cekNisnAndName = $name['name'];
+        }
+        
+        if($cekNisnAndName !== $this->name) {
+            return redirect()->route('dataTransaksi')->with('error', 'nisn and name do not match!');
+        }
 
         switch ($this->bln_dibayar) {
             case 'January':
@@ -105,6 +129,7 @@ class UpdateTransaksi extends Component
         
         pembayaran::find($this->transaksiId)->update([
             'nisn' => $this->nisn,
+            'nama_siswa' => $this->name,
             'spp_id' => $this->spp_id,
             'tgl_dibayar' => $this->tgl_dibayar,
             'bln_dibayar' => $this->bln_dibayar,
@@ -122,6 +147,8 @@ class UpdateTransaksi extends Component
             'total_bayar' => $totalBayarUpdate
         ]);
 
+
+        return redirect()->route('dataTransaksi')->with('success', 'transaction data successfully updated');
         $this->clearDataUpdateTransaksi();
         $this->emit('success-update-data-transaksi');
     }
@@ -129,6 +156,7 @@ class UpdateTransaksi extends Component
     private function clearDataUpdateTransaksi()
     {
         $this->nisn = null;
+        $this->name = null;
         $this->tgl_dibayar = null;
         $this->bln_dibayar = null;
         $this->thn_dibayar = null;

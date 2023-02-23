@@ -23,6 +23,8 @@ class DataTransaksi extends Component
 
     public $nisn, $name, $tgl_dibayar, $bln_dibayar, $thn_dibayar, $jumlah_bayar, $spp_id, $bln;
 
+    public $isLoading = false;
+
     protected $listeners = [
         'success-create-data-transaksi' => 'handleCreateDataTransaksi',
         'success-update-data-transaksi' => 'handleUpdateDataTransaksi',
@@ -118,6 +120,16 @@ class DataTransaksi extends Component
         //
     }
 
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
+    }
+
     public function makeDataTransaksi()
     {
         $this->validate([
@@ -129,6 +141,21 @@ class DataTransaksi extends Component
             'jumlah_bayar' => 'required|min:5|max:40|string',
             'spp_id' => 'required'
         ]);
+
+        $cekNisn = user::where('nisn', $this->nisn)->where('level', 'siswa')->get('name')->toArray();
+        foreach($cekNisn as $name)
+        {
+            $cekNisnAndName = $name['name'];
+        }
+
+        if($cekNisnAndName !== $this->name) {
+            return redirect()->route('dataTransaksi')->with('error', 'nisn and name do not match!');
+        }
+
+        $cekDatePembayaran = pembayaran::where('nama_siswa', $this->name)->where('bln_dibayar', $this->bln_dibayar)->where('thn_dibayar', $this->thn_dibayar)->get();
+        if(count($cekDatePembayaran) >= 1) {
+            return redirect()->route('dataTransaksi')->with('error', 'there was an error in the month of payment and the year of payment!');
+        }
 
         switch ($this->bln_dibayar) {
             case 'January':
@@ -170,7 +197,7 @@ class DataTransaksi extends Component
         }
 
         $cek = spp::whereMonth('tahun', $this->bln)->whereYear('tahun', $this->thn_dibayar)->get('nominal');
-        
+
         foreach($cek as $data) {
             if(intval($this->jumlah_bayar) > intval($data['nominal'])) {
                 $this->clearDataCreateTransaksi();
@@ -179,7 +206,7 @@ class DataTransaksi extends Component
         }
 
         $nama_pengelola = Auth()->user()->name;
-        
+
         pembayaran::create([
             'nisn' => $this->nisn,
             'nama_siswa' => $this->name,
@@ -196,12 +223,13 @@ class DataTransaksi extends Component
         foreach($total_bayar as $bayar) {
                 $totalBayarUpdate = intval($bayar['total_bayar']) - intval($this->jumlah_bayar);
         }
-        
+
         User::where('nisn', $this->nisn)->update([
             'total_bayar' => $totalBayarUpdate
         ]);
-        
 
+
+        return redirect()->route('dataTransaksi')->with('success', 'transaction data successfully added');
         $this->clearDataCreateTransaksi();
         $this->emit('success-create-data-transaksi');
     }
@@ -254,6 +282,8 @@ class DataTransaksi extends Component
         $data = pembayaran::where('tgl_dibayar', $tgl)->where('bln_dibayar', $bln)->where('thn_dibayar', $thn);
         $data->delete();
 
+
+        return redirect()->route('dataTransaksi')->with('success', 'transaction data successfully deleted');
         $this->emit('success-delete-transaksi');
     }
 }

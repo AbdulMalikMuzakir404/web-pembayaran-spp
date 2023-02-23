@@ -147,18 +147,41 @@
                                             accept=".png, .jpg, .jpeg">
                                     </div>
                                     <div class="col">
-                                        <button class="btn btn-secondary" type="submit">change</button>
-                                        <div wire:loading class="" wire:target="change">
-                                            <i class="fas fa-spinner fa-spin"></i>
-                                            <p>Uploading....</p>
-                                        </div>
+                                        <button type="submit" wire:click="changeImg" class="btn btn-secondary">
+                                            <div wire:loading wire:target="changeImg">
+                                                <div class="la-line-scale">
+                                                    <div></div>
+                                                    <div></div>
+                                                    <div></div>
+                                                    <div></div>
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            change
+                                        </button>
                                     </div>
                                 </div>
                             </form>
 
                             <form wire:submit.prevent="deleteImage" class="form-group mt-3">
-                                <button wire:loading class="btn btn-danger" type="submit"
-                                    wire:model="delete">Delete</button>
+                                <div class="row">
+                                    <div class="col">
+                                        <div wire:loading wire:target="deleteImg">
+                                            <div class="la-line-scale la-dark">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" wire:click="deleteImg" class="btn btn-danger">
+                                            delete
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
 
 
@@ -294,7 +317,16 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-info">Save and Change</button>
+                                    <button type="submit" wire:click="submitCPro" class="btn btn-info">
+                                        <div wire:loading wire:target="submitCPro">
+                                            <div class="la-ball-fall">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                        Save and Change
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -351,7 +383,16 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-info" type="submit">Save and Change</button>
+                                        <button type="submit" wire:click="submitCPass" class="btn btn-info">
+                                        <div wire:loading wire:target="submitCPass">
+                                            <div class="la-ball-fall">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                        Save and Change
+                                    </button>
                                     </div>
                                 </div>
                             </form>

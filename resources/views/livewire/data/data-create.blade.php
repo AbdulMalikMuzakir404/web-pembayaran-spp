@@ -46,7 +46,16 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-info">Save</button>
+                                    <button type="submit" wire:click="submitSpp" class="btn btn-info">
+                                        <div wire:loading wire:target="submitSpp">
+                                            <div class="la-ball-fall">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                        Save
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +116,16 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-info">Save</button>
+                                    <button type="submit" wire:click="submitKelas" class="btn btn-info">
+                                        <div wire:loading wire:target="submitKelas">
+                                            <div class="la-ball-fall">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                        Save
+                                    </button>
                                 </div>
                             </div>
                         </div>

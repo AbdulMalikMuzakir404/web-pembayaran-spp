@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\pembayaran;
 use Illuminate\Http\Request;
+use Livewire\WithPagination;
+use Illuminate\Support\Facades\Session;
+use PDF;
 
 class HomeController extends Controller
 {
+    use WithPagination;
+
     /**
      * Create a new controller instance.
      *
@@ -23,7 +28,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         // January
         $january = pembayaran::where('bln_dibayar', 'january')->where('thn_dibayar', date('Y'))->sum('jumlah_bayar');
@@ -72,6 +77,25 @@ class HomeController extends Controller
         $belumLunas = pembayaran::where('status_pembayaran', 0)->get();
         $hitung_belum_lunas = count($belumLunas);
 
+        if($request->has('search'))
+        {
+            $transaksi = pembayaran::orderBy('name')
+            ->join('spps', 'pembayarans.spp_id', 'spps.id')
+            ->join('users', 'pembayarans.nisn', 'users.nisn')
+            ->where('name', 'like', '%' . $request->search . '%')
+            ->where('status_pembayaran', $request->status_pembayaran)
+            ->paginate(12);
+            Session::put('halaman_url', request()->fullUrl());
+        } else
+        {
+            $transaksi = pembayaran::orderBy('name')
+            ->join('spps', 'pembayarans.spp_id', 'spps.id')
+            ->join('users', 'pembayarans.nisn', 'users.nisn')
+            ->paginate(12);
+            Session::put('halaman_url', request()->fullUrl());
+        }
+
+
         return view('home', compact(
             'january',
             'february',
@@ -90,6 +114,22 @@ class HomeController extends Controller
             'jumlah_siswa',
             'hitung_lunas',
             'hitung_belum_lunas',
+
+            'transaksi'
         ));
     }
+
+    // public function exportpdf(Request $request)
+    // {
+    //     $transaksi = pembayaran::orderBy('name')
+    //     ->join('spps', 'pembayarans.spp_id', 'spps.id')
+    //     ->join('users', 'pembayarans.nisn', 'users.nisn')
+    //     ->where('name', 'like', '%' . $request->search . '%')
+    //     ->where('status_pembayaran', $request->status_pembayaran);
+    //     Session::put('halaman_url', request()->fullUrl());
+
+    //     view()->share('transaksi', $transaksi);
+    //     $pdf = PDF::loadview('PDF.admin-create-laporan');
+    //     return $pdf->download('DataTransaksi.pdf');
+    // }
 }

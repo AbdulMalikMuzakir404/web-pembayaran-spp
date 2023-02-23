@@ -133,7 +133,7 @@
                                                 class="@error('thn_dibayar') is-invalid @enderror form-select"
                                                 value="{{ old('thn_dibayar') }}" required>
                                                 <option selected="selected">Tahun</option>
-                                                @for ($tahun = 1920; $tahun <= date('Y'); $tahun++)
+                                                @for ($tahun = date('Y'); $tahun >= 2000; $tahun--)
                                                     <option value="{{ $tahun }}">{{ $tahun }}</option>
                                                 @endfor
                                             </select>
@@ -164,7 +164,16 @@
 
                                 <div class="row mt-3">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-info">Save</button>
+                                        <button type="submit" wire:click="submit" class="btn btn-info">
+                                            <div wire:loading wire:target="submit">
+                                                <div class="la-ball-fall">
+                                                    <div></div>
+                                                    <div></div>
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -175,6 +184,7 @@
         @endif
         @endcanany
 
+        @can('pengelola')
         <div class="col-md-12 mb-3">
             <div class="card">
                 <div class="card-header">
@@ -272,6 +282,6 @@
                 </div>
             </div>
         </div>
-
+        @endcan
     </div>
 </div>

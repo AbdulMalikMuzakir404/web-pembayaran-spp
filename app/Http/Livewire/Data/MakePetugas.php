@@ -20,12 +20,24 @@ class MakePetugas extends Component
 
     public $status_petugas = false;
 
+    public $isLoading = false;
+
     protected $listeners = [
         'success-create-data-petugas' => 'handleCreatePetugas',
         'success-update-data-petugas'=> 'handleUpdatePetugas',
         'success-delete-data-petugas' => 'handleDeletePetugas',
         'add-data-petugas' => 'handleAddPetugas'
     ];
+
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
+    }
 
     public function render()
     {
@@ -77,6 +89,7 @@ class MakePetugas extends Component
             'level' => 'petugas',
         ]);
 
+        return redirect()->route('makeSiswa')->with('success', 'Officer data added successfully');
         $this->clearDataCreatePetugas();
         $this->emit('success-create-data-petugas');
     }

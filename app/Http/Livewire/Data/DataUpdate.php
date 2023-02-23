@@ -9,6 +9,8 @@ class DataUpdate extends Component
 {
     public $tahun, $nominal, $sppId;
 
+    public $isLoading = false;
+
     // lintening
     protected $listeners = [
         'passing-update-data-spp' => 'showDataSpp'
@@ -17,6 +19,16 @@ class DataUpdate extends Component
     public function render()
     {
         return view('livewire.data.data-update');
+    }
+
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
     }
 
     public function showDataSpp($data_spp)
@@ -33,11 +45,19 @@ class DataUpdate extends Component
             'nominal' => 'required|max:30'
         ]);
 
+        // $cekSpp = spp::where('tahun', $this->tahun)->get();
+
+        // if(count($cekSpp) >= 1) {
+        //     return redirect()->route('dataCreate')->with('error', 'SPP data already exists!');
+        // }
+
         spp::where('id', $this->sppId)->update([
             'tahun' => $this->tahun,
             'nominal' => $this->nominal
         ]);
 
+
+        return redirect()->route('dataCreate')->with('success', 'SPP data successfully changed');
         $this->clearDataUpdateSpp();
         $this->emit('success-update-data-spp');
     }
@@ -51,6 +71,7 @@ class DataUpdate extends Component
 
     public function addSpp()
     {
+        $this->clearDataUpdateSpp();
         $this->emit('add-data-spp');
     }
 }

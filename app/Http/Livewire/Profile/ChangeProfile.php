@@ -17,6 +17,12 @@ class ChangeProfile extends Component
 
     public $old_password, $password, $password_confirmation;
 
+    public $isLoadingaImg = false;
+    public $isLoadingaImgD = false;
+
+    public $isLoadingPro = false;
+    public $isLoadingPass = false;
+
     public function mount()
     {
         $this->userId = Auth()->user()->id;
@@ -29,6 +35,50 @@ class ChangeProfile extends Component
     public function render()
     {
         return view('livewire.profile.change-profile');
+    }
+
+    // load img update and add
+    public function changeImg()
+    {
+        $this->isLoadingaImg = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingaImg = false;
+    }
+
+    // load img delete
+    public function deleteImg()
+    {
+        $this->isLoadingaImgD = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingaImgD = false;
+    }
+
+    // load change profile
+    public function submitCPro()
+    {
+        $this->isLoadingPro = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingPro = false;
+    }
+
+    // load change password
+    public function submitCPass()
+    {
+        $this->isLoadingPass = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingPass = false;
     }
 
     public function changeProfile()

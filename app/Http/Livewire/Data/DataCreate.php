@@ -25,6 +25,9 @@ class DataCreate extends Component
 
     public $nama_kelas, $kopetensi_keahlian, $tahun, $nominal, $spp;
 
+    public $isLoadingSpp = false;
+    public $isLoadingKelas = false;
+
     // lintening
     protected $listeners = [
         'success-create-data-spp' => 'handleSpp',
@@ -42,7 +45,7 @@ class DataCreate extends Component
     public function render()
     {
         return view('livewire.data.data-create', [
-            'data_spp' => $this->search_spp == null ? spp::orderBy('tahun')->paginate($this->paginate_spp) : spp::orderBy('tahun')->where('tahun', 'like', '%' . $this->search_spp . '%')->paginate($this->paginate_spp),
+            'data_spp' => $this->search_spp == null ? spp::orderBy('tahun')->whereYear('tahun', date('Y'))->paginate($this->paginate_spp) : spp::orderBy('tahun')->whereYear('tahun', date('Y'))->where('tahun', 'like', '%' . $this->search_spp . '%')->paginate($this->paginate_spp),
             'data_kelas' => $this->search_kelas == null ? ruang::orderBy('nama_kelas')->paginate($this->paginate_kelas) : spp::orderBy('nama_kelas')->where('nama_kelas', 'like', '%' . $this->search_kelas . '%')->paginate($this->paginate_kelas)
         ]);
     }
@@ -87,6 +90,26 @@ class DataCreate extends Component
         $this->status_kelas = false;
     }
 
+    public function submitSpp()
+    {
+        $this->isLoadingSpp = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingSpp = false;
+    }
+
+    public function submitKelas()
+    {
+        $this->isLoadingKelas = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoadingKelas = false;
+    }
+
     // get id spp to update
     public function getIdSpp($id)
     {
@@ -111,17 +134,21 @@ class DataCreate extends Component
             'nominal' => 'required|max:30'
         ]);
 
-        $cekSpp = spp::where('tahun', $this->tahun)->get();
+        $bln = explode("-", $this->tahun);
 
-        if(count($cekSpp) >= 1) {
-            dd('error');
-        }
+        $cekSpp = spp::whereMonth('tahun', $bln[1])->whereYear('tahun', $bln[0])->get();
         
+        if(count($cekSpp) >= 1) {
+            return redirect()->route('dataCreate')->with('error', 'SPP data already exists!');
+        }
+
         spp::create([
             'tahun' => $this->tahun,
             'nominal' => $this->nominal
         ]);
 
+
+        return redirect()->route('dataCreate')->with('success', 'SPP data successfully added');
         $this->clearDataCreateSpp();
         $this->emit('success-create-data-spp');
     }
@@ -141,9 +168,9 @@ class DataCreate extends Component
         ]);
 
         $cekKelas = ruang::where('nama_kelas', $this->nama_kelas)->where('kopetensi_keahlian', $this->kopetensi_keahlian)->get();
-        
+
         if(count($cekKelas) >= 1) {
-            dd('error');
+            return redirect()->route('dataCreate')->with('error', 'Room data already exists!');
         }
 
         ruang::create([
@@ -151,6 +178,8 @@ class DataCreate extends Component
             'kopetensi_keahlian' => $this->kopetensi_keahlian
         ]);
 
+
+        return redirect()->route('dataCreate')->with('success', 'Room data added successfully');
         $this->clearDataCreateKelas();
         $this->emit('success-create-data-kelas');
     }
@@ -167,7 +196,7 @@ class DataCreate extends Component
         spp::where('id', $id)->delete();
 
         $this->emit('delete-data-spp');
-        // return redirect()->back()->with();
+        return redirect()->route('dataCreate')->with('success', 'SPP data deleted successfully');
     }
 
     // delete data kelas
@@ -176,7 +205,6 @@ class DataCreate extends Component
         ruang::where('id', $id)->delete();
 
         $this->emit('delete-data-kelas');
-        // return redirect()->back()->with();
-
+        return redirect()->route('dataCreate')->with('success', 'Room data has been successfully deleted');
    }
 }

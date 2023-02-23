@@ -37,6 +37,11 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
+
+    <!-- load satu -->
+    <link rel="stylesheet" href="{{ asset('loadAnimations/loadSatu.css') }}">
+    <!-- load dua -->
+    <link rel="stylesheet" href="{{ asset('loadAnimations/loadDua.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -145,66 +150,77 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="{{ route('showProfile') }}" class="nav-link">
-                                <i class="nav-icon bi bi-person-circle"></i>
-                                <p>
-                                    Profile
-                                </p>
-                            </a>
-                        </li>
-
                         @can('pengelola')
+                            <li class="nav-item">
+                                <a href="{{ route('showProfile') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-person-circle"></i>
+                                    <p>
+                                        Profile
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('dataTransaksi') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-bank"></i>
+                                    <p>
+                                        Transaksi
+                                    </p>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('siswa')
                         <li class="nav-item">
-                            <a href="{{ route('dataTransaksi') }}" class="nav-link">
-                                <i class="nav-icon bi bi-bank"></i>
+                            <a href="{{ route('dataBayar') }}" class="nav-link">
+                                <i class="nav-icon bi bi-globe2"></i>
                                 <p>
-                                    Transaksi
+                                    Bayar
                                 </p>
                             </a>
                         </li>
                         @endcan
 
                         @can('admin')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-table"></i>
-                                <p>
-                                    Created data user
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="bi bi-table"></i>
+                                    <p>
+                                        Created data user
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
 
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('makeSiswa') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-person"></i>
-                                        <p>
-                                            Create data Siswa
-                                        </p>
-                                    </a>
-                                </li>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('makeSiswa') }}" class="nav-link">
+                                            <i class="nav-icon bi bi-person"></i>
+                                            <p>
+                                                Create data Siswa
+                                            </p>
+                                        </a>
+                                    </li>
 
-                                <li class="nav-item">
-                                    <a href="{{ route('makePetugas') }}" class="nav-link">
-                                        <i class="nav-icon bi bi-person-badge"></i>
-                                        <p>
-                                            Create data Petugas
-                                        </p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('makePetugas') }}" class="nav-link">
+                                            <i class="nav-icon bi bi-person-badge"></i>
+                                            <p>
+                                                Create data Petugas
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
 
-                        <li class="nav-item">
-                            <a href="{{ route('dataCreate') }}" class="nav-link">
-                                <i class="nav-icon bi bi-calendar-week"></i>
-                                <p>
-                                    Data Create
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="{{ route('dataCreate') }}" class="nav-link">
+                                    <i class="nav-icon bi bi-calendar-week"></i>
+                                    <p>
+                                        Data Create
+                                    </p>
+                                </a>
+                            </li>
                         @endcan
 
 

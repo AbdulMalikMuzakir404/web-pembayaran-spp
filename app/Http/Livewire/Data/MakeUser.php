@@ -22,6 +22,8 @@ class MakeUser extends Component
 
     public $status_siswa = false;
 
+    public $isLoading = false;
+
     // lintening
     protected $listeners = [
         'success-create-data-siswa' => 'handleSiswa',
@@ -32,7 +34,7 @@ class MakeUser extends Component
 
     public function mount()
     {
-        // 
+        //
     }
 
     public function render()
@@ -72,6 +74,16 @@ class MakeUser extends Component
         //
     }
 
+    public function submit()
+    {
+        $this->isLoading = true;
+
+        // Proses loading dilakukan disini
+        sleep(2); // sleep 2 detik untuk simulasi loading
+
+        $this->isLoading = false;
+    }
+
     public function makeDataSiswa()
     {
         $this->validate([
@@ -82,7 +94,7 @@ class MakeUser extends Component
             'alamat' => 'required|min:5|max:70|string',
             'ruang_id' => 'required',
         ]);
-        
+
         User::create([
             'nisn' => $this->nisn,
             'nis' => $this->nis,
@@ -103,6 +115,7 @@ class MakeUser extends Component
             ]);
         }
 
+        return redirect()->route('makeSiswa')->with('success', 'Student data added successfully');
         $this->clearDataCreateSiswa();
         $this->emit('success-create-data-siswa');
    }

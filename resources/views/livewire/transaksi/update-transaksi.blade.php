@@ -31,6 +31,27 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-3">
+                                <h6 class="mb-0">Nama Siswa</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <select aria-label="Default select example" wire:model.lazy="name"
+                                    class="@error('name') is-invalid @enderror form-select"
+                                    value="{{ old('name') }}" required>
+                                    <option selected="selected">Nama Siswa</option>
+                                    @foreach ($datas as $data)
+                                        <option value="{{ $data->name }}">
+                                            {{ $data->name . ' - ' . $data->nisn }}</option>
+                                    @endforeach
+                                </select>
+                                @error('name')
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
                                 <h6 class="mb-0">SPP ID</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
@@ -105,7 +126,7 @@
                                     class="@error('thn_dibayar') is-invalid @enderror form-select"
                                     value="{{ old('thn_dibayar') }}" required>
                                     <option selected="selected">Tahun</option>
-                                    @for ($tahun = 1920; $tahun <= date('Y'); $tahun++)
+                                    @for ($tahun = 2000; $tahun <= date('Y'); $tahun++)
                                         <option value="{{ $tahun }}">{{ $tahun }}</option>
                                     @endfor
                                 </select>
@@ -136,8 +157,17 @@
 
                     <div class="row mt-3">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-info">Save and Change</button>
-                            <button wire:click="addTransaksi()" class="btn btn-primary">Add</button>
+                            <button type="submit" wire:click="submit" class="btn btn-info">
+                                <div wire:loading wire:target="submit">
+                                    <div class="la-ball-fall">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                                Save and Change
+                            </button>
+                            <button wire:click="addTransaksi()" class="btn btn-primary"><i class="bi bi-plus-square"></i></button>
                         </div>
                     </div>
                 </div>

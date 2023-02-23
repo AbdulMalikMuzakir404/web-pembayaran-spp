@@ -6,10 +6,6 @@
 
         <title>Laporan pembayaran SPP | SMKN 1 KATAPANG</title>
 
-    </head>
-
-    <body>
-
         <style>
             .page-break {
                 page-break-after: always;
@@ -24,7 +20,7 @@
             }
 
             .size2 {
-                font-size: 1.4rem;
+                font-size: 15px;
             }
 
             .border-bottom {
@@ -77,6 +73,8 @@
 
             .img {
                 position: absolute;
+                width: 150px;
+                margin-left: -400px;
             }
 
             .link {
@@ -135,9 +133,13 @@
             }
         </style>
 
+    </head>
+
+    <body>
+
         <!-- header -->
         <div class="text-center">
-            <img src="{{ public_path('img/West_Java_coa.png') }}" class="img" alt="logo.png" width="90">
+            {{-- <img src="{{ asset('storage/profile/' . Auth::user()->photo) }}" class="img" alt="logo.png" width="90"> --}}
             <div style="margin-left:6rem;">
                 <span class="text-header text-bold text-danger">
                     PEMERINTAH DAERAH PROVINSI JAWA BARAT <br> DINAS PENDIDIKAN <br>
@@ -145,7 +147,7 @@
                     SEKOLAH MENENGAH KEJURUAN NEGERI 1 KATAPANG <br>
                 </span>
                 <span class="text-desc">Jalan Sekolah Nomor 20 Telepon (0233) 319238<br>FAX (0233) 319238 Website <span
-                        class="underline">www.smkn1kataoang-bdg.co.id</span> - Email <span
+                        class="underline">www.smkn1katapang-bdg.co.id</span> - Email <span
                         class="underline">smkn1katapang@gmail.com</span> <br> Desa Ceuri Kec. Katapang Kab. Bandung
                     45463 <br> </span>
             </div>
@@ -159,32 +161,65 @@
 
             <div class="size2 text-center mb-1">LAPORAN PEMBAYARAN SPP</div>
 
-            <table class="table-center mb-1">
+            <table style="font-size: 7px;" class="table-center mb-1">
                 <thead>
                     <tr>
-                        <th>Petugas</th>
-                        <th>Siswa</th>
-                        <th>Kelas</th>
-                        <th>SPP Bulan</th>
-                        <th>SPP Nominal</th>
-                        <th>Nominal Bayar</th>
-                        <th>Tanggal Bayar</th>
+                        <th scope="col">No</th>
+                            <th scope="col">NISN</th>
+                            <th scope="col">Nama Pengelola</th>
+                            <th scope="col">Nama Siswa</th>
+                            <th scope="col">Tanggal Bayar</th>
+                            <th scope="col">Bulan Bayar</th>
+                            <th scope="col">Tahun Bayar</th>
+                            <th scope="col">Jumah Bayar</th>
+                            <th scope="col">Data SPP</th>
+                            <th scope="col">Tunggakan Perbulan</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Status Pembayaran</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($datas as $val)
+                    @php
+                        $no = 0;
+                    @endphp
+                    @foreach ($transaksi as $key => $dataTransaksi)
+                    @php
+                        $no++;
+                    @endphp
                         <tr>
-                            <td>{{ $val->nisn }}</td>
+                            <th scope="row">{{ $no }}</th>
+                            <td>{{ $dataTransaksi->nisn }}</td>
+                            <td>{{ $dataTransaksi->nama_pengelola }}</td>
+                            <td>{{ $dataTransaksi->nama_siswa }}</td>
+                            <td>{{ $dataTransaksi->tgl_dibayar }}</td>
+                            <td>{{ $dataTransaksi->bln_dibayar }}</td>
+                            <td>{{ $dataTransaksi->thn_dibayar }}</td>
+                            <td>{{ $dataTransaksi->jumlah_bayar }}</td>
+                            <td>{{ $dataTransaksi->tahun . " - Rp." . $dataTransaksi->nominal }}</td>
+                            <td>{{ "Rp." . $dataTransaksi->nominal - $dataTransaksi->jumlah_bayar }}</td>
+                            <td>{{ $dataTransaksi->created_at }}</td>
+                            @if ($dataTransaksi->status_pembayaran == 1)
+                                <td>
+                                    <button disabled class="btn-sm btn-primary"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Lunas</button>
+                                </td>
+                            @elseif ($dataTransaksi->status_pembayaran == 0)
+                                <td>
+                                    <button disabled class="btn-sm btn-warning"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Belum Lunas</button>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
-
-
             </table>
             <!-- /content -->
 
             <!-- footer -->
-            <div>Pembuat : {{ auth()->user()->name }}</div>
+            <div>
+                <p style="font-size: 13px;">Pembuat : {{ auth()->user()->name }}</p>
+                <p style="font-size: 13px;">Date : {{ date('Y-m-d') }}</p>
+            </div>
             <!-- /footer -->
     </body>
 

@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
         "livewire/livewire": "^2.11",
+        "midtrans/midtrans-php": "^2.5",
         "munafio/chatify": "^1.5",
         "pusher/pusher-php-server": "^7.2"
     },

@@ -2,7 +2,6 @@
 
 @push('css')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
 @endpush
 
 @section('content')
@@ -134,6 +133,96 @@
                 </div>
             </div>
         </div>
+
+        <div class="container">
+            <div class="col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Table Data Transaksi</h3>
+                        <form action="{{ route('home') }}" method="get">
+                            <div class="row mt-3">
+                                <div class="col-auto">
+                                    <select name="status_pembayaran" class="form-select w-auto">
+                                        <option value="1">lunas</option>
+                                        <option value="0">belum lunas</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <input name="search" type="text" class="form-control w-auto" placeholder="Seacrh">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover table-responsive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">NISN</th>
+                                    <th scope="col">Nama Pengelola</th>
+                                    <th scope="col">Nama Siswa</th>
+                                    <th scope="col">Tanggal Bayar</th>
+                                    <th scope="col">Bulan Bayar</th>
+                                    <th scope="col">Tahun Bayar</th>
+                                    <th scope="col">Jumah Bayar</th>
+                                    <th scope="col">Data SPP</th>
+                                    <th scope="col">Tunggakan Perbulan</th>
+                                    <th scope="col">Tunggakan Pertahun</th>
+                                    <th scope="col">Created</th>
+                                    <th scope="col">Updated</th>
+                                    <th scope="col">Status Pembayaran</th>
+                                    <th scope="col">Cetak</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $no = 0;
+                                @endphp
+                                @foreach ($transaksi as $key => $dataTransaksi)
+                                    <tr>
+                                        <th scope="row">{{ $key += $transaksi->firstItem() }}</th>
+                                        <td>{{ $dataTransaksi->nisn }}</td>
+                                        <td>{{ $dataTransaksi->nama_pengelola }}</td>
+                                        <td>{{ $dataTransaksi->nama_siswa }}</td>
+                                        <td>{{ $dataTransaksi->tgl_dibayar }}</td>
+                                        <td>{{ $dataTransaksi->bln_dibayar }}</td>
+                                        <td>{{ $dataTransaksi->thn_dibayar }}</td>
+                                        <td>{{ $dataTransaksi->jumlah_bayar }}</td>
+                                        <td>{{ $dataTransaksi->tahun . " - Rp." . $dataTransaksi->nominal }}</td>
+                                        <td>{{ "Rp." . $dataTransaksi->nominal - $dataTransaksi->jumlah_bayar }}</td>
+                                        <td>{{ "Rp." . $dataTransaksi->total_bayar }}</td>
+                                        <td>{{ $dataTransaksi->created_at }}</td>
+                                        <td>{{ $dataTransaksi->updated_at }}</td>
+                                        @if ($dataTransaksi->status_pembayaran == 1)
+                                            <td>
+                                                <button disabled class="btn-sm btn-primary"
+                                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Lunas</button>
+                                            </td>
+                                        @elseif ($dataTransaksi->status_pembayaran == 0)
+                                            <td>
+                                                <button disabled class="btn-sm btn-warning"
+                                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Belum Lunas</button>
+                                            </td>
+                                        @endif
+                                        <td>
+                                            <a href="/home/home/detail-cetak/{{ $dataTransaksi->nisn }}/{{ $dataTransaksi->thn_dibayar }}" class="btn btn-sm btn-secondary"><i class="bi bi-download"></i></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+                        <div class="mt-2">
+                            {{ $transaksi->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @endcan
+
+    @can('siswa')
+    @livewire('siswa.home-siswa')
     @endcan
 
 @endsection

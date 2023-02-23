@@ -40,8 +40,17 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-info">Save and Change</button>
-                            <button wire:click="addSpp()" class="btn btn-secondary">Add</button>
+                            <button type="submit" wire:click="submit" class="btn btn-info">
+                                <div wire:loading wire:target="submit">
+                                    <div class="la-ball-fall">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                                Save and Change
+                            </button>
+                            <button wire:click="addSpp()" class="btn btn-secondary"><i class="bi bi-plus-square"></i></button>
                         </div>
                     </div>
                 </div>
