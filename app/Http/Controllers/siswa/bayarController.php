@@ -13,6 +13,7 @@ class bayarController extends Controller
     public function showBayar()
     {
         $spp = spp::whereYear('tahun', date('Y'))->get();
+
         return view('siswa.siswa-bayar', compact(
             'spp',
         ));
@@ -68,7 +69,14 @@ class bayarController extends Controller
                 break;
         }
 
-        $cekDatePembayaran = pembayaran::where('nisn', auth()->user()->nisn)->where('bln_dibayar', $bln)->where('thn_dibayar', $date_exp[0])->get();
+        $countBayar = pembayaran::where('nisn', auth()->user()->nisn)->where('bln_dibayar', $bln)->where('thn_dibayar', $date_exp[0])->where('midtrans_status', 'pending')->get();
+        $countB = count($countBayar);
+        if($countB >= 1) {
+            pembayaran::where('nisn', auth()->user()->nisn)->where('bln_dibayar', $bln)->where('thn_dibayar', $date_exp[0])->where('midtrans_status', 'pending')->delete();
+        }
+
+        $cekDatePembayaran = pembayaran::where('nisn', auth()->user()->nisn)->where('bln_dibayar', $bln)->where('thn_dibayar', $date_exp[0])->where('midtrans_status', 'success')->get();
+
         if(count($cekDatePembayaran) >= 1) {
             return redirect()->back()->with('error', 'there was an error in the month of payment and the year of payment!');
         }
@@ -81,6 +89,28 @@ class bayarController extends Controller
             }
         }
 
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $random_string = '';
+        $length = 20;
+
+        for ($i = 0; $i < $length; $i++) {
+            $random_string .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        $pembayaran = pembayaran::create([
+            'kode_transaction' => $random_string,
+            'nisn' => auth()->user()->nisn,
+            'nama_siswa' => auth()->user()->name,
+            'tgl_dibayar' => date('d'),
+            'bln_dibayar' => date('F'),
+            'thn_dibayar' => date('Y'),
+            'jumlah_bayar' => '0',
+            'spp_id' => $id,
+            'nama_pengelola' => 'NULL',
+            'status_pembayaran' => 0,
+            'midtrans_status' => 'pending'
+        ]);
+
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.server_key');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
@@ -92,48 +122,51 @@ class bayarController extends Controller
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => intval($data_amount['nominal']),
+                'order_id' => $pembayaran->kode_transaction,
+                'gross_amount' => intval($data_amount['nominal'])
             ),
             'customer_details' => array(
-                'phone' => auth()->user()->nisn,
+                'phone' => auth()->user()->phone,
                 'first_name' => auth()->user()->name,
-                'tgl_dibayar' => date('d'),
-                'bln_dibayar' => date('F'),
-                'thn_dibayar' => date('Y'),
-                'jumlah_bayar' => intval($data_amount['nominal']),
-                'spp_id' => $id,
-                'nama_pengelola' => auth()->user()->name,
-                'status_pembayaran' => 0
             ),
         );
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
-        pembayaran::create([
-            'nisn' => auth()->user()->nisn,
-            'nama_siswa' => auth()->user()->name,
-            'tgl_dibayar' => date('d'),
-            'bln_dibayar' => date('F'),
-            'thn_dibayar' => date('Y'),
-            'jumlah_bayar' => intval($data_amount['nominal']),
-            'spp_id' => $id,
-            'nama_pengelola' => auth()->user()->name,
-            'status_pembayaran' => 0
-        ]);
-
-        $total_bayar = User::where('nisn', auth()->user()->nisn)->get('total_bayar');
-        foreach($total_bayar as $bayar) {
-                $totalBayarUpdate = intval($bayar['total_bayar']) - intval($data_amount['nominal']);
-        }
-
-        User::where('nisn', auth()->user()->nisn)->update([
-            'total_bayar' => $totalBayarUpdate
-        ]);
-
         return view('siswa.detail-bayar', compact(
             'data',
             'snapToken'
         ));
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        if($hashed == $request->signature_key) {
+            if($request->transaction_status == 'settlement' || $request->transaction_status == 'capture') {
+                $exp_amount = explode(".", $request->gross_amount);
+                $trans = pembayaran::where('kode_transaction', $request->order_id);
+                $trans->update([
+                    'midtrans_status' => 'success',
+                    'jumlah_bayar' => $exp_amount[0]
+                ]);
+
+                $total_bayar = pembayaran::join('users', 'pembayarans.nisn', 'users.nisn')->where('kode_transaction', $request->order_id)->get('total_bayar');
+                foreach($total_bayar as $bayar) {
+                    $totalBayarUpdate = intval($bayar['total_bayar']) - intval($exp_amount[0]);
+                }
+
+                pembayaran::join('users', 'pembayarans.nisn', 'users.nisn')->where('kode_transaction', $request->order_id)->update([
+                    'total_bayar' => $totalBayarUpdate
+                ]);
+            } elseif($request->transaction_status == 'pending') {
+                $trans = pembayaran::where('kode_transaction', $request->order_id);
+                $trans->update([
+                    'midtrans_status' => 'pending'
+                ]);
+            }
+
+       }
     }
 }

@@ -19,7 +19,7 @@ class adminCreateLaporanController extends Controller
 
         $transaksi = pembayaran::join('spps', 'pembayarans.spp_id', 'spps.id')
         ->join('users', 'pembayarans.nisn', 'users.nisn')
-        ->where('thn_dibayar', $exp[0])
+        ->where('pembayarans.thn_dibayar', $exp[0])
         ->where('pembayarans.nisn', $nisn)->get();
 
         // view()->share('transaksi', $transaksi);

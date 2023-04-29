@@ -263,9 +263,9 @@
                                         </td>
                                     @endif
                                     <td>
-                                        <button wire:click="updateStatus({{ '\'' . $dataTransaksi->nisn . "-" . $dataTransaksi->tgl_dibayar . "-" . $dataTransaksi->bln_dibayar . "-" . $dataTransaksi->thn_dibayar . '\'' }})"
+                                        {{-- <button wire:click="updateStatus({{ '\'' . $dataTransaksi->nisn . "-" . $dataTransaksi->tgl_dibayar . "-" . $dataTransaksi->bln_dibayar . "-" . $dataTransaksi->thn_dibayar . '\'' }})"
                                             class="btn btn-secondary btn-sm"><i
-                                                class="bi bi-calendar2-check"></i></button>
+                                                class="bi bi-calendar2-check"></i></button> --}}
                                         <button wire:click="getIdTransaksi({{ '\'' . $dataTransaksi->nisn . "-" . $dataTransaksi->tgl_dibayar . "-" . $dataTransaksi->bln_dibayar . "-" . $dataTransaksi->thn_dibayar . '\'' }})"
                                             class="btn btn-primary btn-sm"><i
                                                 class="bi bi-pencil-square"></i></button>
